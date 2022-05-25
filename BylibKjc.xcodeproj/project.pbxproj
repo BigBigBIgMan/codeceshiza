@@ -1,0 +1,356 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CD7019F6283E76A3006DC3F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD7019F5283E76A3006DC3F7 /* Foundation.framework */; };
+		CD7019FE283E76A3006DC3F7 /* BylibKjc.mm in Sources */ = {isa = PBXBuildFile; fileRef = CD7019FD283E76A3006DC3F7 /* BylibKjc.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CD7019F2283E76A3006DC3F7 /* BylibKjc.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = BylibKjc.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD7019F5283E76A3006DC3F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CD7019FA283E76A3006DC3F7 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
+		CD7019FC283E76A3006DC3F7 /* BylibKjc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "BylibKjc-Prefix.pch"; path = "../BylibKjc-Prefix.pch"; sourceTree = "<group>"; };
+		CD7019FD283E76A3006DC3F7 /* BylibKjc.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BylibKjc.mm; sourceTree = "<group>"; };
+		CD701A02283E76A3006DC3F7 /* BylibKjc.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BylibKjc.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CD7019EE283E76A3006DC3F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7019F6283E76A3006DC3F7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CD7019E8283E76A3006DC3F7 = {
+			isa = PBXGroup;
+			children = (
+				CD7019F7283E76A3006DC3F7 /* BylibKjc */,
+				CD7019F4283E76A3006DC3F7 /* Frameworks */,
+				CD7019F3283E76A3006DC3F7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CD7019F3283E76A3006DC3F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019F2283E76A3006DC3F7 /* BylibKjc.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CD7019F4283E76A3006DC3F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019F5283E76A3006DC3F7 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CD7019F7283E76A3006DC3F7 /* BylibKjc */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019FD283E76A3006DC3F7 /* BylibKjc.mm */,
+				CD7019F8283E76A3006DC3F7 /* Package */,
+				CD7019FB283E76A3006DC3F7 /* Supporting Files */,
+			);
+			path = BylibKjc;
+			sourceTree = "<group>";
+		};
+		CD7019F8283E76A3006DC3F7 /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019F9283E76A3006DC3F7 /* DEBIAN */,
+				CD7019FF283E76A3006DC3F7 /* Library */,
+			);
+			path = Package;
+			sourceTree = "<group>";
+		};
+		CD7019F9283E76A3006DC3F7 /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019FA283E76A3006DC3F7 /* control */,
+			);
+			path = DEBIAN;
+			sourceTree = "<group>";
+		};
+		CD7019FB283E76A3006DC3F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CD7019FC283E76A3006DC3F7 /* BylibKjc-Prefix.pch */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CD7019FF283E76A3006DC3F7 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				CD701A00283E76A3006DC3F7 /* MobileSubstrate */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		CD701A00283E76A3006DC3F7 /* MobileSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				CD701A01283E76A3006DC3F7 /* DynamicLibraries */,
+			);
+			path = MobileSubstrate;
+			sourceTree = "<group>";
+		};
+		CD701A01283E76A3006DC3F7 /* DynamicLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				CD701A02283E76A3006DC3F7 /* BylibKjc.plist */,
+			);
+			path = DynamicLibraries;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CD7019EF283E76A3006DC3F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CD7019F1283E76A3006DC3F7 /* BylibKjc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD701A05283E76A3006DC3F7 /* Build configuration list for PBXNativeTarget "BylibKjc" */;
+			buildPhases = (
+				CD7019ED283E76A3006DC3F7 /* Sources */,
+				CD7019EE283E76A3006DC3F7 /* Frameworks */,
+				CD7019EF283E76A3006DC3F7 /* Headers */,
+				CD7019F0283E76A3006DC3F7 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BylibKjc;
+			productName = BylibKjc;
+			productReference = CD7019F2283E76A3006DC3F7 /* BylibKjc.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CD7019E9283E76A3006DC3F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					CD7019F1283E76A3006DC3F7 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = CD7019EC283E76A3006DC3F7 /* Build configuration list for PBXProject "BylibKjc" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CD7019E8283E76A3006DC3F7;
+			productRefGroup = CD7019F3283E76A3006DC3F7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD7019F1283E76A3006DC3F7 /* BylibKjc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CD7019F0283E76A3006DC3F7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/MonkeyDev/bin/md --xcbp";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CD7019ED283E76A3006DC3F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD7019FE283E76A3006DC3F7 /* BylibKjc.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CD701A03283E76A3006DC3F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(MonkeyDevPath)/frameworks/**",
+					"$(MonkeyDevTheosPath)/vendor/lib",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(MonkeyDevTheosPath)/vendor/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = "$(MonkeyDevTheosPath)/vendor/lib/**";
+				MonkeyDevPath = /opt/MonkeyDev;
+				MonkeyDevTheosPath = /opt/theos;
+				OTHER_CFLAGS = "-DTHEOS_INSTANCE_NAME=\"\\\"BylibKjc\\\"\"";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CD701A04283E76A3006DC3F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(MonkeyDevPath)/frameworks/**",
+					"$(MonkeyDevTheosPath)/vendor/lib",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(MonkeyDevTheosPath)/vendor/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = "$(MonkeyDevTheosPath)/vendor/lib/**";
+				MonkeyDevPath = /opt/MonkeyDev;
+				MonkeyDevTheosPath = /opt/theos;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DTHEOS_INSTANCE_NAME=\"\\\"BylibKjc\\\"\"";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		CD701A06283E76A3006DC3F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4TUD3N96LY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BylibKjc/BylibKjc-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(MonkeyDevPath)/include",
+					"$(MonkeyDevTheosPath)/vendor/include/**",
+				);
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				MonkeyDevBuildPackageOnAnyBuild = NO;
+				MonkeyDevClearUiCacheOnInstall = NO;
+				MonkeyDevCopyOnBuild = NO;
+				MonkeyDevDeviceIP = "";
+				MonkeyDevDevicePassword = "";
+				MonkeyDevDevicePort = "";
+				MonkeyDevInstallOnAnyBuild = YES;
+				MonkeyDevInstallOnProfiling = YES;
+				MonkeyDevkillProcessOnInstall = SpringBoard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CD701A07283E76A3006DC3F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4TUD3N96LY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BylibKjc/BylibKjc-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(MonkeyDevPath)/include",
+					"$(MonkeyDevTheosPath)/vendor/include/**",
+				);
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				MonkeyDevBuildPackageOnAnyBuild = NO;
+				MonkeyDevClearUiCacheOnInstall = NO;
+				MonkeyDevCopyOnBuild = NO;
+				MonkeyDevDeviceIP = "";
+				MonkeyDevDevicePassword = "";
+				MonkeyDevDevicePort = "";
+				MonkeyDevInstallOnAnyBuild = YES;
+				MonkeyDevInstallOnProfiling = YES;
+				MonkeyDevkillProcessOnInstall = SpringBoard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CD7019EC283E76A3006DC3F7 /* Build configuration list for PBXProject "BylibKjc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD701A03283E76A3006DC3F7 /* Release */,
+				CD701A04283E76A3006DC3F7 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD701A05283E76A3006DC3F7 /* Build configuration list for PBXNativeTarget "BylibKjc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD701A06283E76A3006DC3F7 /* Release */,
+				CD701A07283E76A3006DC3F7 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CD7019E9283E76A3006DC3F7 /* Project object */;
+}
