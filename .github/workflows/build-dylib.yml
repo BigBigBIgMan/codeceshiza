@@ -29,8 +29,7 @@ jobs:
         sed -i '' '/DEVELOPMENT_TEAM = 7RVGRL9LRW;/d' 654323.xcodeproj/project.pbxproj
         
         # 添加ALWAYS_SEARCH_USER_PATHS = NO
-        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\
-				ALWAYS_SEARCH_USER_PATHS = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				ALWAYS_SEARCH_USER_PATHS = NO;' 654323.xcodeproj/project.pbxproj
         
     - name: List Available Schemes
       run: |
