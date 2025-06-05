@@ -19,22 +19,41 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Build Dynamic Library
+    - name: Fix Project Settings
       run: |
-        # 列出可用的schemes
+        # 更新部署目标和构建设置
+        sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' 's/SDKROOT = iphoneos;/SDKROOT = macosx;/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/DEVELOPMENT_TEAM = 7RVGRL9LRW;/d' 654323.xcodeproj/project.pbxproj
+        
+        # 添加ALWAYS_SEARCH_USER_PATHS = NO
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\
+				ALWAYS_SEARCH_USER_PATHS = NO;' 654323.xcodeproj/project.pbxproj
+        
+    - name: List Available Schemes
+      run: |
         xcodebuild -list -project 654323.xcodeproj
         
-        # 构建dylib
+    - name: Build Dynamic Library
+      run: |
+        # 构建dylib for macOS
         xcodebuild \
           -project 654323.xcodeproj \
+          -target 1212 \
           -configuration Release \
           -destination "platform=macOS" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
           build
           
-    - name: Find and Upload Artifacts
+    - name: Find and Copy Artifacts
       run: |
         # 查找生成的dylib文件
-        find . -name "*.dylib" -type f
+        echo "查找dylib文件..."
+        find . -name "*.dylib" -type f -ls
         
         # 创建artifacts目录
         mkdir -p artifacts
@@ -42,14 +61,23 @@ jobs:
         # 复制dylib文件到artifacts目录
         find . -name "*.dylib" -type f -exec cp {} artifacts/ \;
         
+        # 如果没找到dylib，查找所有构建产物
+        if [ ! "$(ls -A artifacts/)" ]; then
+          echo "未找到dylib文件，查找所有构建产物..."
+          find build -type f -name "*" 2>/dev/null || echo "构建目录不存在"
+          find . -name "*1212*" -type f 2>/dev/null || echo "未找到目标文件"
+        fi
+        
         # 列出artifacts内容
-        ls -la artifacts/
+        ls -la artifacts/ || echo "artifacts目录为空"
         
     - name: Upload dylib artifacts
       uses: actions/upload-artifact@v4
       with:
         name: dylib-files
-        path: artifacts/*.dylib
+        path: |
+          artifacts/*.dylib
+          build/**/*.dylib
         if-no-files-found: warn
         
     - name: Create Release (on tag)
