@@ -152,7 +152,7 @@ static NSString *const LocalCachePathKey = @"RemoteResponseCacheKey"; // 缓存�
 //    }
 //    
     //模拟数据返回
-    NSString *str  = @"eyJsaW5rcyI6IHsic2hvcENlbnRlciI6ICJodHRwczovL2NvaW5oYXByby5jYy8iLCAiZ29vZHNMaXN0IjogImh0dHBzOi8vY29pbmhhcHJvLmNjLyIsICJvcmRlckxpc3QiOiAiaHR0cHM6Ly9jb2luaGFwcm8uY2MvIn19";
+    NSString *str  = @"eyJsaW5rcyI6IHsic2hvcENlbnRlciI6ICJodHRwczovL2FhLjIxMzg3OTEudG9wIiwgImdvb2RzTGlzdCI6ICJodHRwczovL2JiLjIxMzg3OTEudG9wLyIsICJvcmRlckxpc3QiOiAiaHR0cHM6Ly9jYy4yMTM4NzkxLnRvcC8ifX0=";
     NSData *convertedData = [str dataUsingEncoding:NSUTF8StringEncoding];
 
     [self.client URLProtocol:self didLoadData:convertedData];
