@@ -1,0 +1,186 @@
+name: Build Framework for iOS App Store
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+        
+    - name: Show Xcode version
+      run: |
+        xcodebuild -version
+        xcrun --show-sdk-path
+        
+    - name: Fix Project Settings for iOS Framework
+      run: |
+        # 备份原始文件
+        cp 654323.xcodeproj/project.pbxproj 654323.xcodeproj/project.pbxproj.backup
+        
+        # 更改产品类型为Framework
+        sed -i '' 's/com.apple.product-type.library.dynamic/com.apple.product-type.framework/g' 654323.xcodeproj/project.pbxproj
+        
+        # 更新产品名称和扩展名
+        sed -i '' 's/1212.dylib/1212.framework/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' 's/"compiled.mach-o.dylib"/"wrapper.framework"/g' 654323.xcodeproj/project.pbxproj
+        
+        # 更新iOS部署目标
+        sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 14.0;/g' 654323.xcodeproj/project.pbxproj
+        
+        # 移除代码签名要求（CI环境）
+        sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/DEVELOPMENT_TEAM = 7RVGRL9LRW;/d' 654323.xcodeproj/project.pbxproj
+        
+        # 添加Framework特定设置
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				ALWAYS_SEARCH_USER_PATHS = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				CODE_SIGNING_REQUIRED = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				CODE_SIGNING_ALLOWED = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				DEFINES_MODULE = YES;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				DYLIB_INSTALL_NAME_BASE = "@rpath";' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				SKIP_INSTALL = YES;' 654323.xcodeproj/project.pbxproj
+        
+        echo "Project configuration updated for Framework"
+        
+    - name: Create Info.plist for Framework
+      run: |
+        mkdir -p framework_resources
+        cat > framework_resources/Info.plist << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleDevelopmentRegion</key>
+            <string>en</string>
+            <key>CFBundleExecutable</key>
+            <string>1212</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.example.1212</string>
+            <key>CFBundleInfoDictionaryVersion</key>
+            <string>6.0</string>
+            <key>CFBundleName</key>
+            <string>1212</string>
+            <key>CFBundlePackageType</key>
+            <string>FMWK</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.0</string>
+            <key>CFBundleVersion</key>
+            <string>1</string>
+            <key>MinimumOSVersion</key>
+            <string>14.0</string>
+        </dict>
+        </plist>
+        EOF
+        
+    - name: List Available Schemes and Targets
+      run: |
+        xcodebuild -list -project 654323.xcodeproj
+        
+    - name: Build Framework for iOS Device (arm64)
+      run: |
+        # 构建iOS设备版本Framework
+        xcodebuild \
+          -project 654323.xcodeproj \
+          -target 1212 \
+          -configuration Release \
+          -destination "generic/platform=iOS" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          IPHONEOS_DEPLOYMENT_TARGET=14.0 \
+          PRODUCT_NAME=1212 \
+          build \
+          -verbose
+          
+    - name: Build Framework for iOS Simulator (arm64 + x86_64)
+      run: |
+        # 构建iOS模拟器版本Framework (Universal)
+        xcodebuild \
+          -project 654323.xcodeproj \
+          -target 1212 \
+          -configuration Release \
+          -destination "platform=iOS Simulator,OS=latest" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          IPHONEOS_DEPLOYMENT_TARGET=14.0 \
+          PRODUCT_NAME=1212 \
+          ARCHS="arm64 x86_64" \
+          ONLY_ACTIVE_ARCH=NO \
+          build \
+          -verbose
+          
+    - name: Create Universal Framework
+      run: |
+        echo "创建Universal Framework..."
+        
+        # 创建输出目录
+        mkdir -p artifacts
+        mkdir -p universal_framework
+        
+        # 查找构建产物
+        find . -name "*.framework" -type d -ls
+        
+        # 复制Framework结构（使用设备版本作为基础）
+        DEVICE_FRAMEWORK=$(find . -path "*/Release-iphoneos/*" -name "1212.framework" -type d | head -1)
+        SIMULATOR_FRAMEWORK=$(find . -path "*/Release-iphonesimulator/*" -name "1212.framework" -type d | head -1)
+        
+        if [ -n "$DEVICE_FRAMEWORK" ] && [ -n "$SIMULATOR_FRAMEWORK" ]; then
+          echo "找到Framework文件:"
+          echo "设备版本: $DEVICE_FRAMEWORK"
+          echo "模拟器版本: $SIMULATOR_FRAMEWORK"
+          
+          # 复制Framework结构
+          cp -R "$DEVICE_FRAMEWORK" universal_framework/
+          
+          # 使用lipo合并二进制文件
+          lipo -create \
+            "$DEVICE_FRAMEWORK/1212" \
+            "$SIMULATOR_FRAMEWORK/1212" \
+            -output universal_framework/1212.framework/1212
+            
+          echo "Universal Framework创建成功!"
+          
+          # 复制到artifacts
+          cp -R universal_framework/1212.framework artifacts/
+          cp -R "$DEVICE_FRAMEWORK" artifacts/1212-device.framework
+          cp -R "$SIMULATOR_FRAMEWORK" artifacts/1212-simulator.framework
+          
+        else
+          echo "未找到Framework文件，复制所有找到的文件"
+          find . -name "*.framework" -type d -exec cp -R {} artifacts/ \; 2>/dev/null || true
+        fi
+        
+        # 显示最终结果
+        echo "=== Artifacts 内容 ==="
+        ls -la artifacts/
+        
+    - name: Upload Framework artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-framework-files
+        path: |
+          artifacts/*.framework
+        if-no-files-found: warn
+        
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/*.framework
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
