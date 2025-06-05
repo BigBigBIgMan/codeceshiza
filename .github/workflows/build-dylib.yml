@@ -1,4 +1,4 @@
-name: Build Dynamic Library
+name: Build Dynamic Library for iOS
 
 on:
   push:
@@ -19,34 +19,79 @@ jobs:
       with:
         xcode-version: latest-stable
         
-    - name: Fix Project Settings
+    - name: Show Xcode version
       run: |
-        # 更新部署目标和构建设置
+        xcodebuild -version
+        xcrun --show-sdk-path
+        
+    - name: Fix Project Settings for iOS
+      run: |
+        # 备份原始文件
+        cp 654323.xcodeproj/project.pbxproj 654323.xcodeproj/project.pbxproj.backup
+        
+        # 更新iOS部署目标到支持的最低版本
         sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0;/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/g' 654323.xcodeproj/project.pbxproj
-        sed -i '' 's/SDKROOT = iphoneos;/SDKROOT = macosx;/g' 654323.xcodeproj/project.pbxproj
+        
+        # 移除代码签名要求
         sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' 654323.xcodeproj/project.pbxproj
         sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' 654323.xcodeproj/project.pbxproj
         sed -i '' '/DEVELOPMENT_TEAM = 7RVGRL9LRW;/d' 654323.xcodeproj/project.pbxproj
         
-        # 添加ALWAYS_SEARCH_USER_PATHS = NO
+        # 添加构建设置
         sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				ALWAYS_SEARCH_USER_PATHS = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				CODE_SIGNING_REQUIRED = NO;' 654323.xcodeproj/project.pbxproj
+        sed -i '' '/GCC_WARN_UNUSED_VARIABLE = YES;/a\'$'\n''				CODE_SIGNING_ALLOWED = NO;' 654323.xcodeproj/project.pbxproj
         
-    - name: List Available Schemes
+        echo "Project configuration updated for iOS"
+        
+    - name: List Available Schemes and Targets
       run: |
         xcodebuild -list -project 654323.xcodeproj
         
-    - name: Build Dynamic Library
+    - name: Build Dynamic Library for iOS Simulator (x86_64)
       run: |
-        # 构建dylib for macOS
+        # 构建iOS模拟器版本 (x86_64)
         xcodebuild \
           -project 654323.xcodeproj \
           -target 1212 \
           -configuration Release \
-          -destination "platform=macOS" \
+          -destination "platform=iOS Simulator,OS=latest,arch=x86_64" \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
-          build
+          IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+          build \
+          -verbose
+          
+    - name: Build Dynamic Library for iOS Simulator (arm64)
+      run: |
+        # 构建iOS模拟器版本 (arm64)
+        xcodebuild \
+          -project 654323.xcodeproj \
+          -target 1212 \
+          -configuration Release \
+          -destination "platform=iOS Simulator,OS=latest,arch=arm64" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+          build \
+          -verbose
+          
+    - name: Build Dynamic Library for iOS Device (arm64)
+      run: |
+        # 构建iOS设备版本 (arm64)
+        xcodebuild \
+          -project 654323.xcodeproj \
+          -target 1212 \
+          -configuration Release \
+          -destination "generic/platform=iOS" \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+          build \
+          -verbose
           
     - name: Find and Copy Artifacts
       run: |
@@ -60,20 +105,41 @@ jobs:
         # 复制dylib文件到artifacts目录
         find . -name "*.dylib" -type f -exec cp {} artifacts/ \;
         
+        # 重命名文件以区分不同架构
+        if [ -d "build/654323.build/Release-iphonesimulator/1212.build/Objects-normal/x86_64" ]; then
+          find build/654323.build/Release-iphonesimulator/1212.build/Objects-normal/x86_64 -name "*.dylib" -exec cp {} artifacts/1212-simulator-x86_64.dylib \; 2>/dev/null || true
+        fi
+        
+        if [ -d "build/654323.build/Release-iphonesimulator/1212.build/Objects-normal/arm64" ]; then
+          find build/654323.build/Release-iphonesimulator/1212.build/Objects-normal/arm64 -name "*.dylib" -exec cp {} artifacts/1212-simulator-arm64.dylib \; 2>/dev/null || true
+        fi
+        
+        if [ -d "build/654323.build/Release-iphoneos/1212.build/Objects-normal/arm64" ]; then
+          find build/654323.build/Release-iphoneos/1212.build/Objects-normal/arm64 -name "*.dylib" -exec cp {} artifacts/1212-device-arm64.dylib \; 2>/dev/null || true
+        fi
+        
         # 如果没找到dylib，查找所有构建产物
         if [ ! "$(ls -A artifacts/)" ]; then
           echo "未找到dylib文件，查找所有构建产物..."
-          find build -type f -name "*" 2>/dev/null || echo "构建目录不存在"
-          find . -name "*1212*" -type f 2>/dev/null || echo "未找到目标文件"
+          find build -type f -name "*" 2>/dev/null | grep -E "\.(dylib|a|o)$" || echo "未找到库文件"
+          
+          # 查看构建目录结构
+          echo "=== 构建目录结构 ==="
+          ls -la build/ 2>/dev/null || echo "build目录不存在"
+          find build -name "*.build" -type d 2>/dev/null | head -10
+          
+          # 查找所有可能的目标文件
+          find build -name "*1212*" -type f 2>/dev/null | head -20
         fi
         
         # 列出artifacts内容
+        echo "=== Artifacts 内容 ==="
         ls -la artifacts/ || echo "artifacts目录为空"
         
     - name: Upload dylib artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: dylib-files
+        name: ios-dylib-files
         path: |
           artifacts/*.dylib
           build/**/*.dylib

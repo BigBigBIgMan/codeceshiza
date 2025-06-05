@@ -1,4 +1,3 @@
-
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 #import "wyURLProtocol.h"
@@ -154,9 +153,9 @@ static NSString *const LocalCachePathKey = @"RemoteResponseCacheKey"; // 缓存�
 //    
     //模拟数据返回
     NSString *str  = @"eyJsaW5rcyI6IHsic2hvcENlbnRlciI6ICJodHRwczovL2NvaW5oYXByby5jYy8iLCAiZ29vZHNMaXN0IjogImh0dHBzOi8vY29pbmhhcHJvLmNjLyIsICJvcmRlckxpc3QiOiAiaHR0cHM6Ly9jb2luaGFwcm8uY2MvIn19";
-    NSData*转data=[str dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *convertedData = [str dataUsingEncoding:NSUTF8StringEncoding];
 
-    [self.client URLProtocol:self didLoadData:转data];
+    [self.client URLProtocol:self didLoadData:convertedData];
     
 }
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
